@@ -35,6 +35,16 @@ public class MainDeviceTransformer implements IDeviceTransformer {
     return m_transformers;
   }
 
+  /**
+   * Method to set the transformers manually. Use this carefully, transformers can also be set automatically by
+   * {@link #getTransformers()}.
+   *
+   * @param transformers to bet set, can be null
+   */
+  public void setTransformers(List<IDeviceTransformer> transformers) {
+    m_transformers = transformers;
+  }
+
   protected List<IDeviceTransformer> createTransformers() {
     return BEANS.all(IDeviceTransformer.class, transformer -> !(transformer instanceof MainDeviceTransformer) && transformer.isActive());
   }
