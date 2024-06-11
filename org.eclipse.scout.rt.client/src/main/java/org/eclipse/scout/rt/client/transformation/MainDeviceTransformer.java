@@ -45,7 +45,7 @@ public class MainDeviceTransformer implements IDeviceTransformer {
     m_transformers = transformers;
   }
 
-  protected List<IDeviceTransformer> createTransformers() {
+  public List<IDeviceTransformer> createTransformers() {
     return BEANS.all(IDeviceTransformer.class, transformer -> !(transformer instanceof MainDeviceTransformer) && transformer.isActive());
   }
 
