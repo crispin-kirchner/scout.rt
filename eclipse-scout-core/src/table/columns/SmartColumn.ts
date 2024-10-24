@@ -29,6 +29,7 @@ export class SmartColumn<TValue> extends Column<TValue> {
   browseAutoExpandAll: boolean;
   browseLoadIncremental: boolean;
   activeFilterEnabled: boolean;
+  valueTransformer: (TValue) => string;
 
   protected _lookupCallBatchContext: SmartColumnBatchContext<TValue>;
 
@@ -41,11 +42,13 @@ export class SmartColumn<TValue> extends Column<TValue> {
     this.browseAutoExpandAll = true;
     this.browseLoadIncremental = false;
     this.activeFilterEnabled = false;
+    this.valueTransformer = null;
     this._lookupCallBatchContext = null;
   }
 
   protected override _init(model: InitModelOf<this>) {
     super._init(model);
+    this.valueTransformer = this.valueTransformer || objects.ensureValidKey;
     this._setLookupCall(this.lookupCall);
     this._setCodeType(this.codeType);
   }
@@ -179,7 +182,7 @@ export class SmartColumn<TValue> extends Column<TValue> {
     currentBatchContext.keySet.add(key);
 
     // return text for current key
-    return currentBatchContext.result.then(textMap => textMap[objects.ensureValidKey(key)] || '');
+    return currentBatchContext.result.then(textMap => textMap[this.valueTransformer(key)] || '');
   }
 
   /**

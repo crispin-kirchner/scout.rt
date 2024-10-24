@@ -20,4 +20,5 @@ export interface SmartColumnModel<TValue> extends ColumnModel<TValue> {
   browseAutoExpandAll?: boolean;
   browseLoadIncremental?: boolean;
   activeFilterEnabled?: boolean;
+  valueTransformer?: (TValue) => string;
 }

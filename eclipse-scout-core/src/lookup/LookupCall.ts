@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, 2023 BSI Business Systems Integration AG
+ * Copyright (c) 2010, 2024 BSI Business Systems Integration AG
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -32,6 +32,7 @@ export class LookupCall<TKey> implements LookupCallModel<TKey>, ObjectWithType {
   parentKey: TKey;
   active: boolean;
   maxRowCount: number;
+  keyTransformer: (TKey) => string;
 
   constructor() {
     this.session = null;
@@ -45,11 +46,14 @@ export class LookupCall<TKey> implements LookupCallModel<TKey>, ObjectWithType {
     this.parentKey = null;
     this.active = null;
     this.maxRowCount = 100;
+    this.keyTransformer = null;
   }
 
   init(model: InitModelOf<this>) {
     scout.assertParameter('session', model.session);
     this._init(model);
+
+    this.keyTransformer = this.keyTransformer || objects.ensureValidKey;
   }
 
   protected _init(model: InitModelOf<this>) {
@@ -134,7 +138,7 @@ export class LookupCall<TKey> implements LookupCallModel<TKey>, ObjectWithType {
 
         const textMap = {};
         result.lookupRows.forEach(row => {
-          textMap[objects.ensureValidKey(row.key)] = row.text;
+          textMap[this.keyTransformer(row.key)] = row.text;
         });
 
         return textMap;

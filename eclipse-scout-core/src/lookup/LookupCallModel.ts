@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, 2023 BSI Business Systems Integration AG
+ * Copyright (c) 2010, 2024 BSI Business Systems Integration AG
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -39,6 +39,8 @@ export interface LookupCallModel<TKey> extends ObjectModel<LookupCall<TKey>> {
    * Default value is 100.
    */
   maxRowCount?: number;
+
+  keyTransformer?: (TKey) => string;
 
   [property: string]: any; // allow custom properties
 }
