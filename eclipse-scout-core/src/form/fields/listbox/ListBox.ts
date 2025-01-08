@@ -67,16 +67,23 @@ export class ListBox<TLookup, TValue = TLookup[]> extends LookupBox<TLookup, TVa
       return;
     }
     this._valueSyncing = true;
-    // FIXME cki: wahrscheinlich auslagern in eigene Methode
-    // let valueArray = [];
-    // this.table.rows.forEach(row => {
-    //   if (row.checked) {
-    //     valueArray.push(row.lookupRow.key);
-    //   }
-    // });
-    //
-    // this.setValue(valueArray);
+    this.setValue(this._tableToValue());
     this._valueSyncing = false;
+  }
+
+  protected _tableToValue(): TValue {
+    // FIXME cki: separieren in ListbOX und AbstractListBox
+    return this._tableToValueDefault() as TValue;
+  }
+
+  protected _tableToValueDefault(): TLookup[] {
+    let valueArray: TLookup[] = [];
+    this.table.rows.forEach(row => {
+      if (row.checked) {
+        valueArray.push(row.lookupRow.key);
+      }
+    });
+    return valueArray;
   }
 
   protected override _valueChanged() {
@@ -90,34 +97,44 @@ export class ListBox<TLookup, TValue = TLookup[]> extends LookupBox<TLookup, TVa
     }
 
     this._valueSyncing = true;
-    let opts = {
-      checkOnlyEnabled: false
-    };
     try {
-      if (arrays.empty(newValue)) {
-        this.table.uncheckRows(this.table.rows, opts);
-      } else {
-        // if lookup was not executed yet: do it now.
-        let lookupScheduled = this._ensureLookupCallExecuted();
-        if (lookupScheduled) {
-          return; // was the first lookup: table has no rows yet. cancel sync. Will be executed again after lookup execution.
-        }
-
-        let rowsToCheck = [];
-
-        this.table.uncheckRows(this.table.rows, opts);
-        this.table.rows.forEach(row => {
-          if (arrays.containsAny(newValue, row.lookupRow.key)) {
-            rowsToCheck.push(row);
-          }
-        }, this);
-        this.table.checkRows(rowsToCheck, opts);
+      // FIXME cki: es gab mal diesen "fastpath", prüfen ob es das wirklich braucht
+      // if (arrays.empty(newValue)) {
+      //   this.table.uncheckRows(this.table.rows, opts);
+      // } else {
+      // if lookup was not executed yet: do it now.
+      let lookupScheduled = this._ensureLookupCallExecuted();
+      if (lookupScheduled) {
+        return; // was the first lookup: table has no rows yet. cancel sync. Will be executed again after lookup execution.
       }
+
+      this._valueToTable(newValue);
+
+      // }
 
       this._updateDisplayText();
     } finally {
       this._valueSyncing = false;
     }
+  }
+
+  protected _valueToTable(newValue: TValue) {
+    // FIXME cki: default
+    this._valueToTableDefault(newValue as TLookup[]);
+  }
+
+  protected _valueToTableDefault(newValue: TLookup[]) {
+    let opts = {checkOnlyEnabled: false};
+
+    let rowsToCheck = [];
+
+    this.table.uncheckRows(this.table.rows, opts);
+    this.table.rows.forEach(row => {
+      if (arrays.containsAny(newValue, row.lookupRow.key)) {
+        rowsToCheck.push(row);
+      }
+    }, this);
+    this.table.checkRows(rowsToCheck, opts);
   }
 
   protected override _lookupByAllDone(result: LookupResult<TLookup>) {
