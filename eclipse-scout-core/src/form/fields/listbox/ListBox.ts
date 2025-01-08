@@ -13,8 +13,8 @@ import {
 } from '../../../index';
 import $ from 'jquery';
 
-export class ListBox<TValue> extends LookupBox<TValue> implements ListBoxModel<TValue> {
-  declare model: ListBoxModel<TValue>;
+export class ListBox<TLookup, TValue = TLookup[]> extends LookupBox<TLookup, TValue> implements ListBoxModel<TLookup, TValue> {
+  declare model: ListBoxModel<TLookup, TValue>;
 
   table: Table;
 
@@ -32,7 +32,7 @@ export class ListBox<TValue> extends LookupBox<TValue> implements ListBoxModel<T
     this.table.setScrollTop(this.scrollTop);
   }
 
-  protected _initStructure(value: TValue[]) {
+  protected _initStructure(value: TValue) {
     if (!this.table) {
       this.table = this._createDefaultListBoxTable();
     }
@@ -67,14 +67,15 @@ export class ListBox<TValue> extends LookupBox<TValue> implements ListBoxModel<T
       return;
     }
     this._valueSyncing = true;
-    let valueArray = [];
-    this.table.rows.forEach(row => {
-      if (row.checked) {
-        valueArray.push(row.lookupRow.key);
-      }
-    });
-
-    this.setValue(valueArray);
+    // FIXME cki: wahrscheinlich auslagern in eigene Methode
+    // let valueArray = [];
+    // this.table.rows.forEach(row => {
+    //   if (row.checked) {
+    //     valueArray.push(row.lookupRow.key);
+    //   }
+    // });
+    //
+    // this.setValue(valueArray);
     this._valueSyncing = false;
   }
 
@@ -83,7 +84,7 @@ export class ListBox<TValue> extends LookupBox<TValue> implements ListBoxModel<T
     this._syncValueToTable(this.value);
   }
 
-  protected _syncValueToTable(newValue: TValue[]) {
+  protected _syncValueToTable(newValue: TValue) {
     if (!this.lookupCall || this._valueSyncing || !this.initialized) {
       return;
     }
@@ -119,12 +120,12 @@ export class ListBox<TValue> extends LookupBox<TValue> implements ListBoxModel<T
     }
   }
 
-  protected override _lookupByAllDone(result: LookupResult<TValue>) {
+  protected override _lookupByAllDone(result: LookupResult<TLookup>) {
     super._lookupByAllDone(result);
     this._populateTable(result);
   }
 
-  protected _populateTable(result: LookupResult<TValue>) {
+  protected _populateTable(result: LookupResult<TLookup>) {
     let
       tableRows = [],
       lookupRows = result.lookupRows;
@@ -142,7 +143,7 @@ export class ListBox<TValue> extends LookupBox<TValue> implements ListBoxModel<T
   /**
    * Returns a lookup row for each value currently checked.
    */
-  getCheckedLookupRows(): LookupRow<TValue>[] {
+  getCheckedLookupRows(): LookupRow<TLookup>[] {
     if (this.value === null || arrays.empty(this.value) || this.table.rows.length === 0) {
       return [];
     }
@@ -152,7 +153,7 @@ export class ListBox<TValue> extends LookupBox<TValue> implements ListBoxModel<T
       .map(row => row.lookupRow);
   }
 
-  protected _createTableRow(lookupRow: LookupRow<TValue>): TableRowModel {
+  protected _createTableRow(lookupRow: LookupRow<TLookup>): TableRowModel {
     let cell = lookupField.createTableCell(lookupRow);
     let row: TableRowModel = {
       cells: [cell],
