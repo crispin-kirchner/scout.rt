@@ -9,6 +9,6 @@
  */
 import {LookupBoxModel, ObjectOrChildModel, Table} from '../../../index';
 
-export interface ListBoxModel<TLookup, TValue> extends LookupBoxModel<TLookup, TValue> {
+export interface ListBoxModel<TLookup, TValue = TLookup[]> extends LookupBoxModel<TLookup, TValue> {
   table?: ObjectOrChildModel<Table>;
 }
