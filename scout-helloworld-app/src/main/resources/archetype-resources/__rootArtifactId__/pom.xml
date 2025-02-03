@@ -14,7 +14,7 @@
   <properties>
     <${groupId}.${rootArtifactId}.version>${project.version}</${groupId}.${rootArtifactId}.version>
     <jdk.source.version>${javaVersion}</jdk.source.version>
-  <org.eclipse.scout.rt.version>25.1-SNAPSHOT</org.eclipse.scout.rt.version>
+    <org.eclipse.scout.rt.version>25.1-SNAPSHOT</org.eclipse.scout.rt.version>
     <master_npm_release_dependency_mapping>--mapping.0.regex=@eclipse-scout --mapping.0.version=${org.eclipse.scout.rt.version}</master_npm_release_dependency_mapping>
 
     <!-- docker image build settings -->
@@ -23,7 +23,7 @@
     <docker.app.image.tag>${versionWithoutSnapshot}-latest</docker.app.image.tag>
     <!-- java source image (pull) -->
     <docker.java.image.name>eclipse-temurin</docker.java.image.name>
-    <docker.java.image.tag>17-jdk-jammy</docker.java.image.tag>
+    <docker.java.image.tag>21-jdk-jammy</docker.java.image.tag>
     <docker.java.image>${docker.java.image.name}:${docker.java.image.tag}</docker.java.image>
   </properties>
 
