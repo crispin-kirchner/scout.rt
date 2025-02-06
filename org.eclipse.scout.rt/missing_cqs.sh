@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Copyright (c) 2010, 2024 BSI Business Systems Integration AG
+# Copyright (c) 2010, 2025 BSI Business Systems Integration AG
 #
 # This program and the accompanying materials are made
 # available under the terms of the Eclipse Public License 2.0
@@ -27,11 +27,11 @@ cd ..
 DASH_VERSION="1.1.1-SNAPSHOT"
 
 # The tool can automatically create gitlab issues for every necessary review
-# To do so, create an api token at https://gitlab.eclipse.org/-/profile/personal_access_tokens, update TOKEN variable below and uncomment REVIEW variable
+# To do so, create an api token at https://gitlab.eclipse.org/-/user_settings/personal_access_tokens, update TOKEN variable below and uncomment REVIEW variable
 # See also https://github.com/eclipse/dash-licenses?tab=readme-ov-file#automatic-ip-team-review-requests
 TOKEN="ADD API TOKEN HERE"
 REVIEW=""
-#REVIEW=-review -token $TOKEN -repo https://github.com/eclipse-scout/scout.rt -project technology.scout
+#REVIEW="-review -token $TOKEN -repo https://github.com/eclipse-scout/scout.rt -project technology.scout"
 
 echo "MISSING CQs OF ALL TRANSITIVE JAVA DEPENDENCIES:"
 mvn dependency:list -pl="-org.eclipse.scout.rt:org.eclipse.scout.rt.ui.html.selenium,-org.eclipse.scout.rt:org.eclipse.scout.rt.platform.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.shared.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.server.commons.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.server.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.server.jaxws.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.server.jdbc.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.dataobject.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.jackson.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.mom.api.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.mom.jms.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.mail.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.security.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.rest.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.rest.jersey.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.client.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.svg.client.test,-org.eclipse.scout.rt:org.eclipse.scout.rt.ui.html.test" |
