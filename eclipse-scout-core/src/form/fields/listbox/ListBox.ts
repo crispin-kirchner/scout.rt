@@ -18,10 +18,13 @@ export class ListBox<TLookup, TValue = TLookup[]> extends LookupBox<TLookup, TVa
 
   table: Table;
 
+  hideTableLines: boolean;
+
   constructor() {
     super();
 
     this.table = null;
+    this.hideTableLines = true;
 
     this._addWidgetProperties(['table', 'filterBox']);
   }
@@ -49,6 +52,18 @@ export class ListBox<TLookup, TValue = TLookup[]> extends LookupBox<TLookup, TVa
     this.$container.addClass('list-box');
   }
 
+  protected override _renderProperties() {
+    super._renderProperties();
+    this._renderHideTableLines();
+  }
+
+  protected _renderHideTableLines() {
+    if (!this.$container) {
+      return;
+    }
+    this.$container.toggleClass('hide-table-lines', this.hideTableLines);
+  }
+
   protected _createFieldContainerLayout(): ListBoxLayout {
     return new ListBoxLayout(this, this.table, this.filterBox);
   }
@@ -56,6 +71,10 @@ export class ListBox<TLookup, TValue = TLookup[]> extends LookupBox<TLookup, TVa
   protected _renderStructure() {
     this.table.render(this.$fieldContainer);
     this.addField(this.table.$container);
+  }
+
+  setHideTableLines(hideTableLines: boolean) {
+    this.setProperty('hideTableLines', hideTableLines);
   }
 
   protected _onTableRowsChecked(event: TableRowsCheckedEvent) {
