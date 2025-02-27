@@ -769,6 +769,7 @@ export * from './form/fields/labelfield/LabelField';
 export * from './form/fields/labelfield/LabelFieldModel';
 export * from './form/fields/labelfield/LabelFieldEventMap';
 export * from './form/fields/labelfield/LabelFieldAdapter';
+export * from './form/fields/listbox/AbstractListBox';
 export * from './form/fields/listbox/ListBox';
 export * from './form/fields/listbox/ListBoxAdapter';
 export * from './form/fields/listbox/ListBoxLayout';
